@@ -46,8 +46,6 @@ graficarParticulas<- function(tiempo){
   }
 }
 
-##################################
-
 ui <-fluidPage(
   navbarPage("Simulación de una capa de medio filtrante",
            tabPanel("Gráfico",fluidPage(theme = shinytheme("flatly")),
@@ -87,47 +85,6 @@ ui <-fluidPage(
 
 )
 
-##################################
-
-
-
-
-
-
-
-
-# ui <- fluidPage(
-#   theme <- shinytheme("flatly"),
-# 
-#     titlePanel("Visualización de una capa "),
-# 
-#     sidebarLayout(
-#         sidebarPanel(
-#           
-#             sliderInput("bins",
-#                         "Tiempo en minutos",
-#                         min = 0,
-#                         step = 5,
-#                         max = 120,
-#                         value = 5)
-#         ),
-#         # Show a plot of the generated distribution
-#         mainPanel(
-#           
-#           tabsetPanel(type = "tabs",
-#                       tabPanel("Plot", plotOutput("plot")),
-#                       tabPanel("Información", "Esta aplicación muestra la cantidad de 
-#                                partículas contaminantes atrapadas en un medio filtrante 
-#                                durante 2 horas, podemos visualizar la cantidad de
-#                                partículas atrapadas cada 5 minutos."),
-#                       tabPanel("Table", tableOutput("table"))
-#           )
-#         )
-#     )
-# )
-
-
-#Define server logic required to draw a histogram
 server <- function(input, output) {
     output$plot <- renderPlot({
       
@@ -137,7 +94,7 @@ server <- function(input, output) {
     
 }
 
-# Run the application 
+ 
 shinyApp(ui = ui, server = server)
 
 
