@@ -1,8 +1,9 @@
 library(shiny)
+library(shinythemes)
 library(plotrix)
 
 graficarcapaC <- function(radio,capa, titulo=""){
-  
+  par(mar = c(0,0,0,0))
   plot(NULL, xlim=c(0,2*radio), 
        ylim=c(0,2*radio), main=titulo,asp=1,
        xlab="",ylab="",axes=F,
@@ -16,8 +17,8 @@ graficarcapaC <- function(radio,capa, titulo=""){
     }
   }
 }
-CAPA <- read.csv("CAPA800F5.csv")
-load("simulacion_multi.RData")
+CAPA <- read.csv("Datos/CAPA800F5.csv")
+load("Datos/simulacion_multi.RData")
 
 graficarParticula<- function(color, particulas){
   for(i in 1: dim(particulas)[1]){
@@ -28,6 +29,10 @@ graficarParticula<- function(color, particulas){
 }
 
 graficarParticulas<- function(tiempo){
+  
+  if(tiempo==0){
+    graficarcapaC(radio=800, CAPA, titulo="")
+  }else{
   tt <- tiempo/5
   graficarcapaC(radio=800, CAPA, titulo="")
   colores <- rep(c("red", "yellow", "blue"), c(8,8,8))
@@ -38,46 +43,105 @@ graficarParticulas<- function(tiempo){
     graficarParticula(colores[i], temp)
     
   }
+  }
 }
 
+##################################
 
-ui <- fluidPage(
+ui <-fluidPage(
+  navbarPage("Simulación de una capa de medio filtrante",
+           tabPanel("Gráfico",fluidPage(theme = shinytheme("flatly")),
+                    tags$head(
+                      tags$style(HTML(".shiny-output-error-validation{color: red;}"))),
+                    pageWithSidebar(
+                      headerPanel(' '),
+                      sidebarPanel(sliderInput("bins",
+                                               "Tiempo en minutos",
+                                               min = 0,
+                                               step = 5,
+                                               max = 120,
+                                               value = 0),
+                                   HTML("Para ver las partículas capturadas seleccionar un tiempo de simulación, para distinguir los tiempos se utilizan 3 colores con los siguintes significados:
+<p>&nbsp;</p>
+🔴 0 a 40 minutos
+<p>&nbsp;</p>
+🟡 40 a 80 minutos
+<p>&nbsp;</p>
+🔵 80 a 120 minutos")),
 
-    titlePanel("Título"),
+                      mainPanel(
+                        column(8, plotOutput("plot",width = 500, height=500))
+                      )
+                    )),
+           tabPanel("Información",p("Esta aplicación muestra la captura de partículas contaminantes
+            a traves del tiempo sobre una capa simulada de material fibroso no tejido.
+                                      La aplicación muestra una capa circular de material de radio 800 micrómetros y
+                                     la cantidad de partículas contaminantes capturadas a traves de 
+                                     una simulación de 120 minutos", ".",style = "font-size:20px")),
 
-    # Sidebar with a slider input for number of bins 
-    sidebarLayout(
-        sidebarPanel(
-            sliderInput("bins",
-                        "Tiempo en minutos",
-                        min = 0,
-                        step = 5,
-                        max = 120,
-                        value = 5)
-        ),
-        # Show a plot of the generated distribution
-        mainPanel(
-           plotOutput("distPlot")
-        )
-    )
+           tabPanel("Autor",
+                    p(a("Roberto C. Duarte", href="https://github.com/rcduarte01", target="_blank"),style = "font-size:25px"),
+                    p("e-mail: robertoduarte0612@gmail.com",style = "font-size:20px"))
+
 )
+
+)
+
+##################################
+
+
+
+
+
+
+
+
+# ui <- fluidPage(
+#   theme <- shinytheme("flatly"),
+# 
+#     titlePanel("Visualización de una capa "),
+# 
+#     sidebarLayout(
+#         sidebarPanel(
+#           
+#             sliderInput("bins",
+#                         "Tiempo en minutos",
+#                         min = 0,
+#                         step = 5,
+#                         max = 120,
+#                         value = 5)
+#         ),
+#         # Show a plot of the generated distribution
+#         mainPanel(
+#           
+#           tabsetPanel(type = "tabs",
+#                       tabPanel("Plot", plotOutput("plot")),
+#                       tabPanel("Información", "Esta aplicación muestra la cantidad de 
+#                                partículas contaminantes atrapadas en un medio filtrante 
+#                                durante 2 horas, podemos visualizar la cantidad de
+#                                partículas atrapadas cada 5 minutos."),
+#                       tabPanel("Table", tableOutput("table"))
+#           )
+#         )
+#     )
+# )
 
 
 #Define server logic required to draw a histogram
 server <- function(input, output) {
-    output$distPlot <- renderPlot({
+    output$plot <- renderPlot({
       
       graficarParticulas(input$bins)
-        # generate bins based on input$bins from ui.R
-        # x    <- faithful[, 2]
-        # bins <- seq(min(x), max(x), length.out = input$bins + 1)
-        # 
-        # # draw the histogram with the specified number of bins
-        # hist(x, breaks = bins, col = 'darkgray', border = 'white',
-        #      xlab = 'Waiting time to next eruption (in mins)',
-        #      main = 'Histogram of waiting times')
     })
+    
+    
 }
 
 # Run the application 
 shinyApp(ui = ui, server = server)
+
+
+
+
+
+
