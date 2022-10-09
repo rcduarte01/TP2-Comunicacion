@@ -100,12 +100,9 @@ server <- function(input, output) {
     
     output$imagen_descarga <- downloadHandler(
       
-      filename = function() {
-        "capa.pdf"
-      },
-      
-      content = function(file) {
-        pdf(file = "Capa.pdf", width = 8.27, height = 11.69)
+      filename = "file.png", 
+      content = function(file){
+        pdf(file = "Grafico_de_capa.pdf", width = 8.27, height = 11.69)
         graficarParticulas(input$bins)
         dev.off()
       }
