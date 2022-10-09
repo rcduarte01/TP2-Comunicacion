@@ -65,7 +65,13 @@ ui <-fluidPage(
 <p>&nbsp;</p>
 🟡 40 a 80 minutos
 <p>&nbsp;</p>
-🔵 80 a 120 minutos")),
+🔵 80 a 120 minutos"),
+                                   
+                                   hr(),
+                                   downloadButton(
+                                     outputId = "imagen_descarga",
+                                     label = "Descargar imagen"
+                                   )),
 
                       mainPanel(
                         column(8, plotOutput("plot",width = 500, height=500))
@@ -86,12 +92,25 @@ ui <-fluidPage(
 )
 
 server <- function(input, output) {
+  
     output$plot <- renderPlot({
       
       graficarParticulas(input$bins)
     })
     
-    
+    output$imagen_descarga <- downloadHandler(
+      
+      filename = function() {
+        "capa.pdf"
+      },
+      
+      content = function(file) {
+        pdf(file = "Capa.pdf", width = 8.27, height = 11.69)
+        graficarParticulas(input$bins)
+        dev.off()
+      }
+      
+    )
 }
 
  
