@@ -77,11 +77,24 @@ ui <-fluidPage(
                         column(8, plotOutput("plot",width = 500, height=500))
                       )
                     )),
-           tabPanel("Información",p("Esta aplicación muestra la captura de partículas contaminantes
-            a traves del tiempo sobre una capa simulada de material fibroso no tejido.
-                                      La aplicación muestra una capa circular de material de radio 800 micrómetros y
-                                     la cantidad de partículas contaminantes capturadas a traves de 
-                                     una simulación de 120 minutos", ".",style = "font-size:20px")),
+           tabPanel("Información",p("Esta aplicación presenta un modelo computacional de medios filtrantes
+            construido aplicando diagramas de Voronoi-Laguerre para representar materiales fibrosos no tejidos.
+             El modelo de filtro se construye a partir de las propiedades medidas del material como la porosidad,
+              el diámetro medio de la fibra, el grosor y la distribución del tamaño de los poros.
+              Se utiliza el modelo computacional del material para realizar simulaciones de Monte Carlo,
+              aplicando mecanismos básicos de filtración.
+              Las simulaciones de los procesos de filtración incluyeron las siguientes interacciones: 
+              partícula-poro, partícula-fibra y partícula- partícula. Los cálculos de la eficiencia del filtro, 
+              para diferentes distribuciones de tamaño de partículas y poros, concuerdan con la teoría general 
+              de filtración. El modelo permitió rastrear y ubicar las partículas capturadas en poros o fibras,
+              lo que permite visualizar la estructura del medio filtrante con las partículas a traves del tiempo", ".",style = "font-size:20px"),
+                    p("La aplicación muestra una capa de 800 micrómetros y un tiempo de simulación de 120 minutos 
+                      en el cual podemos observar la cantidad de partículas contaminantes capturadas en este tiempo.",style = "font-size:20px"),
+                    hr(), 
+                    p("Bibliografía",style = "font-size:25px"),
+                    p("Destephen, J. A., & Choi, K. J. (1996). Modelling of filtration processes of fibrous filter media. Separations Technology, 6(1), 55-67.",style = "font-size:15px;color: grey"),
+                    p("Duarte, R.C. Simulación estocástica de procesos de filtración utilizando un modelo de medio filtrante basado en 
+                      diagramas de Voronoi-Laguerre.",style = "font-size:15px;color: grey")),
 
            tabPanel("Autor",
                     p(a("Roberto C. Duarte", href="https://github.com/rcduarte01", target="_blank"),style = "font-size:25px"),
